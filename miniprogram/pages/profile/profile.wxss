@@ -1,0 +1,135 @@
+/* pages/profile/profile.wxss */
+.user-info {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+}
+
+.avatar {
+  width: 120rpx;
+  height: 120rpx;
+  border-radius: 50%;
+  margin-right: 20rpx;
+}
+
+.user-details {
+  flex: 1;
+}
+
+.nickname {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 15rpx;
+}
+
+.login-btn {
+  background-color: #4CAF50;
+  color: white;
+  border: none;
+  border-radius: 8rpx;
+  padding: 15rpx 30rpx;
+  font-size: 26rpx;
+}
+
+.stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 30rpx;
+}
+
+.stat-item {
+  text-align: center;
+}
+
+.stat-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #4CAF50;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.stat-label {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+}
+
+.section {
+  margin-top: 30rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 20rpx;
+  padding-left: 10rpx;
+}
+
+.itinerary-item {
+  padding: 20rpx;
+}
+
+.itinerary-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 15rpx;
+}
+
+.dest {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+}
+
+.date {
+  font-size: 24rpx;
+  color: #999;
+}
+
+.itinerary-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 26rpx;
+  color: #666;
+}
+
+.status {
+  color: #4CAF50;
+}
+
+.empty-tip {
+  text-align: center;
+  padding: 60rpx;
+  color: #999;
+  font-size: 28rpx;
+}
+
+.settings-list {
+  padding: 0;
+}
+
+.setting-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25rpx 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.setting-item:last-child {
+  border-bottom: none;
+}
+
+.arrow {
+  font-size: 40rpx;
+  color: #ccc;
+}

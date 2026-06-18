@@ -1,0 +1,32 @@
+<!--pages/map/view.wxml-->
+<view class="map-container">
+  <map 
+    id="travelMap"
+    class="map"
+    longitude="{{centerLocation.longitude}}"
+    latitude="{{centerLocation.latitude}}"
+    scale="14"
+    markers="{{markers}}"
+    polyline="{{polyline}}"
+    show-location
+    bindmarkertap="onMarkerTap"
+  >
+  </map>
+
+  <!-- 底部景点列表 -->
+  <scroll-view class="attractions-list" scroll-y>
+    <view 
+      class="attraction-item"
+      wx:for="{{attractions}}"
+      wx:key="order"
+      bindtap="focusOnAttraction"
+      data-index="{{index}}"
+    >
+      <view class="attraction-order">{{item.order}}</view>
+      <view class="attraction-info">
+        <text class="attraction-name">{{item.name}}</text>
+        <text class="attraction-time">{{item.startTime}} - {{item.endTime}}</text>
+      </view>
+    </view>
+  </scroll-view>
+</view>

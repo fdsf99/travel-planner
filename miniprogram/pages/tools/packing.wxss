@@ -1,0 +1,228 @@
+/* pages/tools/packing.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+  padding: 24rpx;
+}
+
+.card {
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+/* 进度条 */
+.progress-card {
+  background: linear-gradient(135deg, #4CAF50 0%, #66BB6A 100%);
+  color: white;
+}
+
+.progress-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.progress-title {
+  font-size: 32rpx;
+  font-weight: bold;
+}
+
+.progress-text {
+  font-size: 28rpx;
+}
+
+.progress-bar {
+  height: 12rpx;
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-fill {
+  height: 100%;
+  background: white;
+  border-radius: 6rpx;
+  transition: width 0.3s ease;
+}
+
+/* 模板区域 */
+.template-section {
+  padding: 24rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20rpx;
+}
+
+.template-scroll {
+  white-space: nowrap;
+}
+
+.template-item {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20rpx 24rpx;
+  margin-right: 16rpx;
+  background: #f5f5f5;
+  border-radius: 12rpx;
+  transition: all 0.3s ease;
+}
+
+.template-item.active {
+  background: #e8f5e9;
+  border: 2rpx solid #4CAF50;
+}
+
+.template-icon {
+  font-size: 48rpx;
+  margin-bottom: 8rpx;
+}
+
+.template-name {
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.template-item.active .template-name {
+  color: #4CAF50;
+  font-weight: bold;
+}
+
+/* 分类列表 */
+.categories-list {
+  margin-top: 24rpx;
+}
+
+.category-section {
+  padding: 24rpx;
+}
+
+.category-header {
+  margin-bottom: 20rpx;
+}
+
+.category-info {
+  display: flex;
+  align-items: center;
+}
+
+.category-icon {
+  font-size: 40rpx;
+  margin-right: 12rpx;
+}
+
+.category-name {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 12rpx;
+}
+
+.category-count {
+  font-size: 24rpx;
+  color: #999999;
+}
+
+/* 物品列表 */
+.items-list {
+  margin-left: 20rpx;
+}
+
+.item-row {
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.item-row:last-child {
+  border-bottom: none;
+}
+
+.item-row.checked .item-name {
+  text-decoration: line-through;
+  color: #999999;
+}
+
+.item-checkbox {
+  margin-right: 16rpx;
+}
+
+.item-name {
+  flex: 1;
+  font-size: 28rpx;
+  color: #333333;
+}
+
+.item-delete {
+  width: 48rpx;
+  height: 48rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ff4d4f;
+  font-size: 32rpx;
+}
+
+/* 添加物品表单 */
+.add-item-form {
+  padding: 24rpx;
+}
+
+.form-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-bottom: 20rpx;
+}
+
+.category-selector {
+  white-space: nowrap;
+  margin-bottom: 20rpx;
+}
+
+.category-chip {
+  display: inline-block;
+  padding: 12rpx 20rpx;
+  margin-right: 12rpx;
+  background: #f5f5f5;
+  border-radius: 24rpx;
+  font-size: 24rpx;
+  color: #666666;
+}
+
+.category-chip.active {
+  background: #e8f5e9;
+  color: #4CAF50;
+  border: 1rpx solid #4CAF50;
+}
+
+.input-group {
+  display: flex;
+  gap: 12rpx;
+}
+
+.item-input {
+  flex: 1;
+  padding: 16rpx 20rpx;
+  background: #f5f5f5;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+}
+
+.btn-add {
+  padding: 16rpx 32rpx;
+  background: #4CAF50;
+  color: white;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  border: none;
+}

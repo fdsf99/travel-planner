@@ -1,0 +1,92 @@
+<!--pages/itinerary/detail.wxml-->
+<view class="container" wx:if="{{itinerary}}">
+  <!-- 行程概览 -->
+  <view class="summary card">
+    <text class="dest-title">{{itinerary.destination.city}}</text>
+    <view class="summary-info">
+      <text>{{itinerary.days}}天行程</text>
+      <text>|</text>
+      <text>{{itinerary.startDate}}</text>
+      <text>|</text>
+      <text>预算¥{{itinerary.budget.total}}</text>
+    </view>
+  </view>
+
+  <!-- 日期Tab -->
+  <scroll-view class="date-tabs" scroll-x>
+    <view 
+      class="date-tab {{currentDay === index ? 'active' : ''}}"
+      wx:for="{{itinerary.daily_plans || itinerary.dailyPlans}}"
+      wx:key="day"
+      bindtap="switchDay"
+      data-index="{{index}}"
+    >
+      <text class="day-text">第{{item.day}}天</text>
+      <text class="day-date">{{item.date}}</text>
+    </view>
+  </scroll-view>
+
+  <!-- 当日活动 -->
+  <view class="activities-section">
+    <view class="section-header">
+      <text class="theme">{{currentPlan.theme || '精彩行程'}}</text>
+    </view>
+
+    <view 
+      class="activity-card card"
+      wx:for="{{currentPlan.activities}}"
+      wx:key="startTime"
+    >
+      <view class="activity-time">
+        <text>{{item.startTime}} - {{item.endTime}}</text>
+      </view>
+      
+      <view class="activity-content">
+        <text class="activity-name">{{item.attractionName}}</text>
+        <text class="activity-desc">{{item.description}}</text>
+        
+        <view class="activity-meta" wx:if="{{item.duration}}">
+          <text>⏱️ 建议游玩: {{item.duration}}分钟</text>
+        </view>
+        
+        <view class="activity-meta" wx:if="{{item.estimatedCost}}">
+          <text>💰 预估费用: ¥{{item.estimatedCost}}</text>
+        </view>
+
+        <view class="activity-tips" wx:if="{{item.tips}}">
+          <text>💡 {{item.tips}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部操作按钮 -->
+  <view class="action-buttons">
+    <button class="btn-secondary" bindtap="viewOnMap">查看地图</button>
+    <button class="btn-primary" bindtap="optimizeRoute">重新优化</button>
+  </view>
+
+  <!-- 工具箱入口 -->
+  <view class="tools-section card">
+    <view class="section-title">旅行工具箱</view>
+    <view class="tools-grid">
+      <view class="tool-item" bindtap="goToPacking">
+        <text class="tool-icon">🧳</text>
+        <text class="tool-name">行李清单</text>
+      </view>
+      <view class="tool-item" bindtap="goToExpenses">
+        <text class="tool-icon">💰</text>
+        <text class="tool-name">费用记录</text>
+      </view>
+      <view class="tool-item" bindtap="goToWeather">
+        <text class="tool-icon">🌤️</text>
+        <text class="tool-name">天气查询</text>
+      </view>
+    </view>
+  </view>
+</view>
+
+<!-- 加载状态 -->
+<view class="loading" wx:else>
+  <text>加载中...</text>
+</view>

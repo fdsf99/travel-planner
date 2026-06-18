@@ -1,0 +1,93 @@
+<!--pages/index/index.wxml-->
+<view class="container">
+  <view class="header">
+    <text class="title">智能旅游规划助手</text>
+    <text class="subtitle">AI为您定制完美行程</text>
+  </view>
+
+  <view class="form-card card">
+    <!-- 目的地输入 -->
+    <view class="form-item">
+      <text class="label">目的地</text>
+      <input 
+        class="input" 
+        placeholder="请输入城市名称,如:北京" 
+        value="{{destination}}"
+        bindinput="onDestinationInput"
+      />
+    </view>
+
+    <!-- 天数选择 -->
+    <view class="form-item">
+      <text class="label">行程天数</text>
+      <slider 
+        min="1" 
+        max="7" 
+        step="1" 
+        value="{{days}}"
+        show-value
+        bindchange="onDaysChange"
+      />
+    </view>
+
+    <!-- 预算输入 -->
+    <view class="form-item">
+      <text class="label">预算(元)</text>
+      <input 
+        class="input" 
+        type="number"
+        placeholder="请输入总预算" 
+        value="{{budget}}"
+        bindinput="onBudgetInput"
+      />
+    </view>
+
+    <!-- 出发日期 -->
+    <view class="form-item">
+      <text class="label">出发日期</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onDateChange">
+        <view class="picker">{{startDate || '请选择出发日期'}}</view>
+      </picker>
+    </view>
+
+    <!-- 兴趣标签 -->
+    <view class="form-item">
+      <text class="label">兴趣偏好(可多选)</text>
+      <view class="tags">
+        <view 
+          class="tag {{selectedInterests.includes(item) ? 'tag-selected' : ''}}"
+          wx:for="{{interestOptions}}"
+          wx:key="*this"
+          bindtap="onTagTap"
+          data-tag="{{item}}"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 生成按钮 -->
+    <button 
+      class="btn-primary" 
+      bindtap="generateItinerary"
+      disabled="{{!canSubmit}}"
+    >
+      {{generating ? '生成中...' : '生成行程'}}
+    </button>
+  </view>
+
+  <!-- 最近行程 -->
+  <view class="recent-section" wx:if="{{recentItineraries.length > 0}}">
+    <text class="section-title">最近行程</text>
+    <view 
+      class="itinerary-item card"
+      wx:for="{{recentItineraries}}"
+      wx:key="_id"
+      bindtap="viewItinerary"
+      data-id="{{item._id}}"
+    >
+      <text class="itinerary-dest">{{item.destination.city}}</text>
+      <text class="itinerary-info">{{item.days}}天 | {{item.startDate}}</text>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>管理后台登录 - 智能旅游规划助手</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar-inner">
+      <a href="/" class="logo">🌍 智能旅游规划助手</a>
+      <nav class="nav">
+        <a href="/">首页</a>
+        <a href="/my.html">我的行程</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="card login-card">
+      <h1>管理后台登录</h1>
+      <div id="statusMsg" class="status-msg"></div>
+      <form id="loginForm">
+        <label class="form-group">
+          <span>用户名</span>
+          <input type="text" id="username" placeholder="admin" required autocomplete="username">
+        </label>
+        <label class="form-group">
+          <span>密码</span>
+          <input type="password" id="password" placeholder="请输入密码" required autocomplete="current-password">
+        </label>
+        <button type="submit" class="btn-primary" id="loginBtn">登录</button>
+      </form>
+      <p class="login-hint">默认账号: admin / admin123 (部署后请通过环境变量修改)</p>
+    </div>
+  </main>
+
+  <footer class="footer">
+    <div class="container">智能旅游规划助手 · AI 驱动</div>
+  </footer>
+
+  <script src="/config.js"></script>
+  <script src="/app.js"></script>
+  <script src="/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,42 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/itinerary/list",
+    "pages/itinerary/detail",
+    "pages/map/view",
+    "pages/tools/packing",
+    "pages/tools/expenses",
+    "pages/tools/weather",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#4CAF50",
+    "navigationBarTitleText": "旅游规划助手",
+    "navigationBarTextStyle": "white"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#4CAF50",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "🏠 首页"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "👤 我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "用于获取您的位置,推荐附近景点"
+    }
+  },
+  "requiredPrivateInfos": ["getLocation"],
+  "style": "v2",
+  "sitemapLocation": "sitemap.json"
+}

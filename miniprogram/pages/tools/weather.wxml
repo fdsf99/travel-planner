@@ -1,0 +1,92 @@
+<!--pages/tools/weather.wxml-->
+<view class="container">
+  <!-- 搜索栏 -->
+  <view class="search-bar card">
+    <input 
+      class="search-input"
+      placeholder="输入城市名称"
+      value="{{searchCity}}"
+      bindinput="onSearchInput"
+    />
+    <button class="btn-search" bindtap="handleSearch">搜索</button>
+  </view>
+
+  <!-- 加载状态 -->
+  <view class="loading-state" wx:if="{{loading}}">
+    <text class="loading-icon">⏳</text>
+    <text class="loading-text">加载中...</text>
+  </view>
+
+  <!-- 天气内容 -->
+  <view class="weather-content" wx:if="{{!loading && weatherData}}">
+    <!-- 当前天气卡片 -->
+    <view class="current-weather card">
+      <view class="weather-header">
+        <text class="city-name">{{weatherData.city}}</text>
+        <text class="update-time">更新于 {{weatherData.updateTime}}</text>
+      </view>
+      
+      <view class="current-info">
+        <view class="weather-main">
+          <text class="weather-icon">{{weatherData.current.weather === '晴' ? '☀️' : weatherData.current.weather === '多云' ? '⛅' : weatherData.current.weather === '阴' ? '☁️' : weatherData.current.weather.includes('雨') ? '🌧️' : '⛈️'}}</text>
+          <text class="weather-desc">{{weatherData.current.weather}}</text>
+        </view>
+        
+        <view class="temperature-range">
+          <text class="temp-high">{{weatherData.current.high}}°</text>
+          <text class="temp-divider">/</text>
+          <text class="temp-low">{{weatherData.current.low}}°</text>
+        </view>
+        
+        <view class="weather-details">
+          <view class="detail-item">
+            <text class="detail-label">风向</text>
+            <text class="detail-value">{{weatherData.current.wind}}</text>
+          </view>
+          <view class="detail-item">
+            <text class="detail-label">湿度</text>
+            <text class="detail-value">{{weatherData.current.humidity}}%</text>
+          </view>
+        </view>
+      </view>
+
+      <!-- 穿衣建议 -->
+      <view class="clothing-advice">
+        <view class="advice-title">👔 穿衣建议</view>
+        <text class="advice-text">{{weatherData.clothingAdvice}}</text>
+      </view>
+    </view>
+
+    <!-- 7天预报 -->
+    <view class="forecast-section card">
+      <view class="section-title">7天预报</view>
+      
+      <view 
+        class="forecast-item"
+        wx:for="{{weatherData.forecasts}}"
+        wx:key="date"
+      >
+        <view class="forecast-date">
+          <text class="forecast-weekday">{{item.weekday}}</text>
+          <text class="forecast-day">{{item.date}}</text>
+        </view>
+        
+        <view class="forecast-weather">
+          <text class="forecast-icon">{{item.weather === '晴' ? '☀️' : item.weather === '多云' ? '⛅' : item.weather === '阴' ? '☁️' : item.weather.includes('雨') ? '🌧️' : '⛈️'}}</text>
+          <text class="forecast-desc">{{item.weather}}</text>
+        </view>
+        
+        <view class="forecast-temp">
+          <text class="forecast-high">{{item.high}}°</text>
+          <text class="forecast-divider">/</text>
+          <text class="forecast-low">{{item.low}}°</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 刷新按钮 -->
+    <button class="btn-refresh" bindtap="refreshWeather">
+      🔄 刷新天气
+    </button>
+  </view>
+</view>

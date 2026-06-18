@@ -1,0 +1,177 @@
+/* pages/itinerary/list.wxss */
+.container {
+  min-height: 100vh;
+  background-color: #f5f5f5;
+}
+
+.list-scroll {
+  height: 100vh;
+  padding: 24rpx;
+}
+
+/* 行程卡片 */
+.itinerary-card {
+  margin-bottom: 24rpx;
+  background: #ffffff;
+  border-radius: 12rpx;
+  padding: 24rpx;
+  box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.05);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20rpx;
+  padding-bottom: 20rpx;
+  border-bottom: 1rpx solid #f0f0f0;
+}
+
+.destination {
+  flex: 1;
+}
+
+.dest-name {
+  font-size: 36rpx;
+  font-weight: bold;
+  color: #333333;
+  margin-right: 16rpx;
+}
+
+.dest-tag {
+  font-size: 24rpx;
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+  padding: 4rpx 12rpx;
+  border-radius: 8rpx;
+}
+
+.card-actions {
+  display: flex;
+  align-items: center;
+}
+
+.btn-delete {
+  width: 48rpx;
+  height: 48rpx;
+  line-height: 48rpx;
+  padding: 0;
+  margin: 0;
+  background: transparent;
+  border: none;
+  font-size: 28rpx;
+  opacity: 0.5;
+}
+
+.btn-delete:active {
+  opacity: 1;
+}
+
+.card-body {
+  margin-bottom: 20rpx;
+}
+
+.info-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16rpx;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
+}
+
+.label {
+  font-size: 26rpx;
+  color: #666666;
+}
+
+.value {
+  font-size: 26rpx;
+  color: #333333;
+  flex: 1;
+  text-align: right;
+  margin-left: 24rpx;
+}
+
+.card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20rpx;
+  border-top: 1rpx solid #f0f0f0;
+}
+
+.status-tag {
+  font-size: 22rpx;
+  padding: 6rpx 16rpx;
+  border-radius: 12rpx;
+}
+
+.status-draft {
+  color: #FF9800;
+  background: rgba(255, 152, 0, 0.1);
+}
+
+.status-confirmed {
+  color: #4CAF50;
+  background: rgba(76, 175, 80, 0.1);
+}
+
+.status-completed {
+  color: #2196F3;
+  background: rgba(33, 150, 243, 0.1);
+}
+
+.create-time {
+  font-size: 22rpx;
+  color: #999999;
+}
+
+/* 空状态 */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 40rpx;
+  text-align: center;
+}
+
+.empty-icon {
+  font-size: 120rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 32rpx;
+  color: #333333;
+  margin-bottom: 16rpx;
+  font-weight: bold;
+}
+
+.empty-desc {
+  font-size: 26rpx;
+  color: #999999;
+  margin-bottom: 48rpx;
+}
+
+.btn-create {
+  width: 300rpx;
+  height: 80rpx;
+  line-height: 80rpx;
+  background: linear-gradient(135deg, #4CAF50, #45B649);
+  color: #ffffff;
+  border-radius: 40rpx;
+  font-size: 28rpx;
+  border: none;
+}
+
+/* 加载状态 */
+.load-more {
+  text-align: center;
+  padding: 40rpx 0;
+  color: #999999;
+  font-size: 26rpx;
+}

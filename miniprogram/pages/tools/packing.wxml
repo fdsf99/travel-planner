@@ -1,0 +1,107 @@
+<!--pages/tools/packing.wxml-->
+<view class="container">
+  <!-- 进度条 -->
+  <view class="progress-card card">
+    <view class="progress-header">
+      <text class="progress-title">准备进度</text>
+      <text class="progress-text">{{getProgress().checked}}/{{getProgress().total}} ({{getProgress().percentage}}%)</text>
+    </view>
+    <view class="progress-bar">
+      <view 
+        class="progress-fill" 
+        style="width: {{getProgress().percentage}}%"
+      ></view>
+    </view>
+  </view>
+
+  <!-- 快速模板 -->
+  <view class="template-section card">
+    <view class="section-title">快速模板</view>
+    <scroll-view class="template-scroll" scroll-x>
+      <view 
+        class="template-item {{currentTemplate === item.key ? 'active' : ''}}"
+        wx:for="{{[{key:'summer',name:'夏季出行'},{key:'winter',name:'冬季出行'},{key:'beach',name:'海边度假'},{key:'mountain',name:'登山徒步'}]}}"
+        wx:key="key"
+        bindtap="handleTemplateChange"
+        data-template="{{item.key}}"
+      >
+        <text class="template-icon">{{item.key === 'summer' ? '☀️' : item.key === 'winter' ? '❄️' : item.key === 'beach' ? '🏖️' : '⛰️'}}</text>
+        <text class="template-name">{{item.name}}</text>
+      </view>
+    </scroll-view>
+  </view>
+
+  <!-- 分类列表 -->
+  <view class="categories-list">
+    <view 
+      class="category-section card"
+      wx:for="{{categories}}"
+      wx:key="id"
+    >
+      <!-- 分类头部 -->
+      <view class="category-header">
+        <view class="category-info">
+          <text class="category-icon">{{item.icon}}</text>
+          <text class="category-name">{{item.name}}</text>
+          <text class="category-count">{{item.items.length}}件</text>
+        </view>
+      </view>
+
+      <!-- 物品列表 -->
+      <view class="items-list">
+        <view 
+          class="item-row {{itemItem.checked ? 'checked' : ''}}"
+          wx:for="{{item.items}}"
+          wx:for-item="itemItem"
+          wx:key="id"
+        >
+          <checkbox 
+            class="item-checkbox"
+            checked="{{itemItem.checked}}"
+            bindchange="toggleItem"
+            data-category-id="{{item.id}}"
+            data-item-id="{{itemItem.id}}"
+          />
+          <text class="item-name">{{itemItem.name}}</text>
+          <view 
+            class="item-delete"
+            bindtap="deleteItem"
+            data-category-id="{{item.id}}"
+            data-item-id="{{itemItem.id}}"
+          >
+            <text>✕</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 添加物品表单 -->
+  <view class="add-item-form card">
+    <view class="form-title">添加新物品</view>
+    
+    <!-- 选择分类 -->
+    <scroll-view class="category-selector" scroll-x>
+      <view 
+        class="category-chip {{selectedCategory === cat.id ? 'active' : ''}}"
+        wx:for="{{categories}}"
+        wx:key="id"
+        bindtap="selectCategory"
+        data-category="{{item.id}}"
+      >
+        {{item.icon}} {{item.name}}
+      </view>
+    </scroll-view>
+
+    <!-- 输入框和按钮 -->
+    <view class="input-group">
+      <input 
+        class="item-input"
+        placeholder="输入物品名称"
+        value="{{newItemName}}"
+        bindinput="onNewItemInput"
+      />
+      <button class="btn-add" bindtap="addNewItem">添加</button>
+    </view>
+  </view>
+</view>

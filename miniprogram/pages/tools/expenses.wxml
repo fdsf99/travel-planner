@@ -1,0 +1,155 @@
+<!--pages/tools/expenses.wxml-->
+<view class="container">
+  <!-- 预算概览 -->
+  <view class="budget-card card">
+    <view class="budget-header">
+      <text class="budget-title">预算概览</text>
+      <button class="btn-toggle" bindtap="toggleViewMode">
+        {{viewMode === 'list' ? '📊 图表' : '📋 列表'}}
+      </button>
+    </view>
+    
+    <view class="budget-stats">
+      <view class="stat-item">
+        <text class="stat-label">总预算</text>
+        <text class="stat-value budget">¥{{displayBudget}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">已花费</text>
+        <text class="stat-value spent">¥{{displayTotalSpent}}</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-label">剩余</text>
+        <text class="stat-value remaining {{remaining < 0 ? 'over' : ''}}">¥{{displayRemaining}}</text>
+      </view>
+    </view>
+
+    <!-- 进度条 -->
+    <view class="budget-progress">
+      <view 
+        class="progress-fill" 
+        style="width: {{progressWidth}}%"
+      ></view>
+    </view>
+    <text class="progress-text">{{progressPercent}}% 已使用</text>
+  </view>
+
+  <!-- 添加费用表单 -->
+  <view class="add-form card">
+    <view class="form-title">记一笔</view>
+    
+    <!-- 金额输入 -->
+    <view class="input-row">
+      <text class="input-label">金额</text>
+      <input 
+        class="amount-input"
+        type="digit"
+        placeholder="0.00"
+        value="{{amount}}"
+        bindinput="onAmountInput"
+      />
+    </view>
+
+    <!-- 分类选择 -->
+    <view class="input-row">
+      <text class="input-label">分类</text>
+      <scroll-view class="category-scroll" scroll-x>
+        <view 
+          class="category-chip {{category === item.id ? 'active' : ''}}"
+          wx:for="{{categories}}"
+          wx:key="id"
+          bindtap="selectCategory"
+          data-category="{{item.id}}"
+          style="border-color: {{item.color}}"
+        >
+          <text>{{item.icon}} {{item.name}}</text>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 日期选择 -->
+    <view class="input-row">
+      <text class="input-label">日期</text>
+      <picker mode="date" value="{{currentDate}}" bindchange="onDateChange">
+        <view class="date-picker">{{currentDate}}</view>
+      </picker>
+    </view>
+
+    <!-- 备注输入 -->
+    <view class="input-row">
+      <text class="input-label">备注</text>
+      <input 
+        class="desc-input"
+        placeholder="选填"
+        value="{{description}}"
+        bindinput="onDescriptionInput"
+      />
+    </view>
+
+    <!-- 提交按钮 -->
+    <button class="btn-submit" bindtap="addExpense">添加记录</button>
+  </view>
+
+  <!-- 费用统计图表 -->
+  <view class="stats-section card" wx:if="{{viewMode === 'chart'}}">
+    <view class="section-title">分类统计</view>
+    
+    <view 
+      class="stat-bar"
+      wx:for="{{categoryStats}}"
+      wx:key="id"
+    >
+      <view class="stat-bar-header">
+        <text class="stat-bar-icon">{{item.icon}}</text>
+        <text class="stat-bar-name">{{item.name}}</text>
+        <text class="stat-bar-amount">¥{{item.displayAmount}}</text>
+        <text class="stat-bar-percent">{{item.percentage}}%</text>
+      </view>
+      <view class="stat-bar-progress">
+        <view 
+          class="stat-bar-fill"
+          style="width: {{item.percentage}}%; background: {{item.color}}"
+        ></view>
+      </view>
+    </view>
+  </view>
+
+  <!-- 费用列表 -->
+  <view class="expenses-list" wx:if="{{viewMode === 'list'}}">
+    <view class="section-title">消费记录</view>
+    
+    <view 
+      class="expense-item card"
+      wx:for="{{displayExpenses}}"
+      wx:key="id"
+    >
+      <view class="expense-left">
+        <view class="expense-icon" style="background: {{item.categoryColor}}">
+          <text>{{item.categoryIcon}}</text>
+        </view>
+        <view class="expense-info">
+          <text class="expense-category">{{item.categoryName}}</text>
+          <text class="expense-desc">{{item.description}}</text>
+          <text class="expense-date">{{item.date}}</text>
+        </view>
+      </view>
+      <view class="expense-right">
+        <text class="expense-amount">-¥{{item.displayAmount}}</text>
+        <view 
+          class="expense-delete"
+          bindtap="deleteExpense"
+          data-id="{{item.id}}"
+        >
+          <text>✕</text>
+        </view>
+      </view>
+    </view>
+
+    <!-- 空状态 -->
+    <view class="empty-state" wx:if="{{displayExpenses.length === 0}}">
+      <text class="empty-icon">💰</text>
+      <text class="empty-text">暂无消费记录</text>
+      <text class="empty-hint">开始记录您的旅行花费吧</text>
+    </view>
+  </view>
+</view>

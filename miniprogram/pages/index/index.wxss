@@ -1,0 +1,99 @@
+/* pages/index/index.wxss */
+.header {
+  text-align: center;
+  padding: 40rpx 0;
+}
+
+.title {
+  font-size: 48rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.subtitle {
+  font-size: 28rpx;
+  color: #999;
+  display: block;
+}
+
+.form-card {
+  margin-top: 20rpx;
+}
+
+.form-item {
+  margin-bottom: 30rpx;
+}
+
+.label {
+  display: block;
+  font-size: 28rpx;
+  color: #666;
+  margin-bottom: 15rpx;
+}
+
+.input {
+  background-color: #f5f5f5;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+}
+
+.picker {
+  background-color: #f5f5f5;
+  border-radius: 8rpx;
+  padding: 20rpx;
+  font-size: 28rpx;
+  color: #333;
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 15rpx;
+}
+
+.tag {
+  padding: 15rpx 25rpx;
+  background-color: #f0f0f0;
+  border-radius: 30rpx;
+  font-size: 26rpx;
+  color: #666;
+  transition: all 0.3s;
+}
+
+.tag-selected {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.recent-section {
+  margin-top: 40rpx;
+}
+
+.section-title {
+  font-size: 32rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 20rpx;
+}
+
+.itinerary-item {
+  padding: 20rpx;
+}
+
+.itinerary-dest {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: #333;
+  display: block;
+  margin-bottom: 10rpx;
+}
+
+.itinerary-info {
+  font-size: 24rpx;
+  color: #999;
+  display: block;
+}
