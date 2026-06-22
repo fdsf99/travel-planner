@@ -13,10 +13,25 @@ const PORT = process.env.PORT || 3000;
 const IS_VERCEL = !!process.env.VERCEL;
 const IS_DEV = process.env.NODE_ENV === 'development';
 
+// Vercel 环境变量检查
+const requiredEnvVars = ['SUPABASE_URL', 'SUPABASE_KEY'];
+const missingEnvVars = requiredEnvVars.filter(v => !process.env[v]);
+if (missingEnvVars.length > 0) {
+  console.warn(`⚠️  缺少环境变量: ${missingEnvVars.join(', ')}`);
+  if (IS_VERCEL) {
+    console.warn('   请在 Vercel Dashboard → Settings → Environment Variables 中配置');
+  } else {
+    console.warn('   请在 backend/.env 文件中配置');
+  }
+}
+
 // 中间件
-app.use(helmet()); // 安全头
+app.use(helmet({
+  contentSecurityPolicy: false, // 关闭CSP,避免Vercel上静态资源被拦截
+  crossOriginEmbedderPolicy: false
+})); // 安全头
 app.use(cors()); // 跨域支持
-app.use(morgan('dev')); // 日志
+app.use(morgan(IS_VERCEL ? 'combined' : 'dev')); // 日志
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 

@@ -148,30 +148,37 @@ router.post('/generate', async (req, res) => {
     // 步骤3: 验证和优化行程(预留扩展点)
     const optimizedItinerary = optimizeItinerary(aiResult.itinerary);
 
-    // 步骤4: 保存到数据库
+    // 步骤4: 保存到数据库(失败时降级为本地ID,不影响行程返回)
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + days - 1);
 
-    const itinerary = await ItineraryService.create({
-      user_id: userId || null,
-      destination_city: destination,
-      start_date: new Date(startDate),
-      end_date: endDate,
-      days,
-      budget: {
-        total: budget,
-        perDay: Math.round(budget / days)
-      },
-      interests,
-      daily_plans: optimizedItinerary.dailyPlans,
-      status: 'draft'
-    });
+    let itineraryId;
+    try {
+      const itinerary = await ItineraryService.create({
+        user_id: userId || null,
+        destination_city: destination,
+        start_date: new Date(startDate),
+        end_date: endDate,
+        days,
+        budget: {
+          total: budget,
+          perDay: Math.round(budget / days)
+        },
+        interests,
+        daily_plans: optimizedItinerary.dailyPlans,
+        status: 'draft'
+      });
+      itineraryId = itinerary.id;
+    } catch (saveError) {
+      console.warn('⚠️  行程保存失败(数据库不可用),使用临时ID:', saveError.message);
+      itineraryId = `local_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+    }
 
-    console.log('Itinerary generated successfully:', itinerary.id);
+    console.log('Itinerary generated successfully:', itineraryId);
 
     res.json({
       success: true,
-      itineraryId: itinerary.id,
+      itineraryId,
       itinerary: optimizedItinerary
     });
   } catch (error) {

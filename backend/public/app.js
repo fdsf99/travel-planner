@@ -24,12 +24,20 @@ async function api(url, options = {}) {
   if (opts.body && typeof opts.body !== 'string') {
     opts.body = JSON.stringify(opts.body);
   }
-  const res = await fetch(`${API}${url}`, opts);
+  let res;
+  try {
+    res = await fetch(`${API}${url}`, opts);
+  } catch (fetchErr) {
+    // 网络层错误(DNS失败/服务器未响应/CORS拦截等)
+    throw new Error(`网络请求失败: ${fetchErr.message} (请检查网络连接或稍后重试)`);
+  }
   let data;
   try { data = await res.json(); } catch (e) { data = {}; }
   if (!res.ok) {
-    const msg = (data && data.message) || (data && data.error) || `请求失败 (${res.status})`;
-    throw new Error(msg);
+    // 优先显示后端返回的具体错误信息
+    const hint = data && data.hint ? `\n💡 ${data.hint}` : '';
+    const msg = (data && data.message) || (data && data.error) || `服务器错误 (${res.status})`;
+    throw new Error(msg + hint);
   }
   return data;
 }
