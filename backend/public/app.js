@@ -104,8 +104,14 @@ function getQueryParam(name) {
 
     try {
       const result = await api('/api/itinerary/generate', { method: 'POST', body: payload });
-      showMsg(statusMsg, '生成成功!即将跳转...', 'success');
       const id = result.itineraryId;
+      // 缓存行程到 sessionStorage,详情页可从缓存读取(数据库保存失败用临时ID时尤其重要)
+      if (id && result.itinerary) {
+        try {
+          sessionStorage.setItem(`itinerary_${id}`, JSON.stringify(result.itinerary));
+        } catch (cacheErr) { /* 缓存失败不影响主流程 */ }
+      }
+      showMsg(statusMsg, '生成成功!即将跳转...', 'success');
       setTimeout(() => { window.location.href = `/detail.html?id=${id}`; }, 800);
     } catch (err) {
       showMsg(statusMsg, '生成失败: ' + err.message, 'error');

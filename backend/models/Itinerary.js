@@ -11,6 +11,11 @@ function isTableNotFoundError(error) {
   return msg.includes('invalid path') || msg.includes('does not exist') || msg.includes('relation');
 }
 
+/** 判断是否为本地临时ID(非UUID),避免查询Supabase时触发uuid语法错误 */
+function isLocalId(id) {
+  return typeof id === 'string' && id.startsWith('local_');
+}
+
 /**
  * 行程相关操作
  * 数据库不可用时降级返回本地模拟数据
@@ -44,8 +49,13 @@ class ItineraryService {
 
   /**
    * 根据ID查找行程
+   * 注意: local_ 开头的临时ID不会查询数据库(前端应从sessionStorage读取)
    */
   static async findById(id) {
+    if (isLocalId(id)) {
+      console.warn(`⚠️  临时ID(${id})无法从数据库查询`);
+      return null;
+    }
     if (dbDown()) return null;
     const { data, error } = await supabase
       .from('itineraries')
@@ -90,7 +100,7 @@ class ItineraryService {
    * 更新行程
    */
   static async update(id, updates) {
-    if (dbDown()) return null;
+    if (isLocalId(id) || dbDown()) return null;
     const { data, error } = await supabase
       .from('itineraries')
       .update(updates)
@@ -110,6 +120,7 @@ class ItineraryService {
    * 删除行程
    */
   static async delete(id) {
+    if (isLocalId(id)) return true; // 本地临时ID直接视为已删除
     if (dbDown()) return true;
     const { error } = await supabase
       .from('itineraries')

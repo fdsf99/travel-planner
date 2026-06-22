@@ -16,10 +16,25 @@ let currentDay = 0;
 async function loadItinerary(id) {
   const loading = document.getElementById('loading');
   const view = document.getElementById('itineraryView');
+  const statusEl = document.getElementById('statusMsg');
+
+  // 优先从 sessionStorage 读取(临时ID或后端不可达时的兜底)
+  try {
+    const cached = sessionStorage.getItem(`itinerary_${id}`);
+    if (cached) {
+      const itinerary = JSON.parse(cached);
+      renderItinerary({ ...itinerary, id });
+      loading.style.display = 'none';
+      view.style.display = '';
+      // 临时ID不查询后端
+      if (typeof id === 'string' && id.startsWith('local_')) return;
+    }
+  } catch (cacheErr) { /* 缓存读取失败,继续走API */ }
+
   try {
     const result = await api(`/api/itinerary/${id}`);
     if (!result.success || !result.itinerary) {
-      showMsg(document.getElementById('statusMsg'), '加载失败', 'error');
+      showMsg(statusEl, '加载失败', 'error');
       loading.style.display = 'none';
       return;
     }
@@ -27,7 +42,7 @@ async function loadItinerary(id) {
     loading.style.display = 'none';
     view.style.display = '';
   } catch (err) {
-    showMsg(document.getElementById('statusMsg'), '加载失败: ' + err.message, 'error');
+    showMsg(statusEl, '加载失败: ' + err.message, 'error');
     loading.style.display = 'none';
   }
 }
