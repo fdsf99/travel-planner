@@ -1,3 +1,4 @@
+const path = require('path');
 const express = require('express');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -34,8 +35,22 @@ app.get('/health', (req, res) => {
   });
 });
 
-// 404处理
-app.use((req, res) => {
+// 静态Web页面(本地开发时同域名访问,Vercel由vercel.json路由处理)
+app.use(express.static(path.join(__dirname, 'public')));
+
+// SPA回退: 非API请求统一返回首页(避免刷新404)
+app.get(/^\/(?!api|health).*/, (req, res, next) => {
+  const fs = require('fs');
+  const reqPath = path.join(__dirname, 'public', req.path);
+  // 精确文件存在则交给static中间件(实际由express.static已处理),这里仅兜底首页
+  if (req.path === '/' || !fs.existsSync(reqPath)) {
+    return res.sendFile(path.join(__dirname, 'public', 'index.html'));
+  }
+  next();
+});
+
+// 404处理 (仅对API请求返回JSON,其他已被SPA回退处理)
+app.use('/api/*', (req, res) => {
   res.status(404).json({ error: 'Route not found' });
 });
 

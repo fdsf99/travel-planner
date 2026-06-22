@@ -106,30 +106,31 @@ router.post('/generate', async (req, res) => {
         const newAttractions = poiResults.filter(p => !existingIds.has(p.source_id));
 
         if (newAttractions.length > 0) {
-          // 并发保存新景点,提升写入效率
-          await Promise.all(newAttractions.map(p =>
-            AttractionService.create({ ...p, city: destination, source: 'amap' })
-          ));
-          attractions = await AttractionService.findByCity(destination, {
-            sortBy: 'popularity',
-            limit: 50
-          });
+          // 尝试保存到数据库(表不存在时静默跳过)
+          const savedResults = await Promise.allSettled(
+            newAttractions.map(p =>
+              AttractionService.create({ ...p, city: destination, source: 'amap' })
+            )
+          );
+          const savedCount = savedResults.filter(r => r.status === 'fulfilled').length;
+          if (savedCount < newAttractions.length) {
+            console.log(`保存景点: ${savedCount}/${newAttractions.length} 成功(部分可能因表不存在跳过)`);
+          }
         }
+
+        // 合并已有的+高德新获取的
+        attractions = [...attractions, ...newAttractions];
       } catch (error) {
         // 高德API失败,使用现有景点继续
         console.log('AMap API failed, using existing attractions:', error.message);
-        if (attractions.length === 0) {
-          return res.status(404).json({
-            error: `数据库中没有找到"${destination}"的景点,且高德地图API调用失败`,
-            message: '请先配置正确的高德地图Web服务Key,或在数据库中手动添加景点数据'
-          });
-        }
       }
     }
 
     if (attractions.length === 0) {
       return res.status(404).json({
-        error: 'No attractions found for this destination'
+        error: `未找到"${destination}"的景点数据`,
+        hint: '可能原因: ① Supabase中attractions表未创建 ② 高德地图API Key(AMAP_KEY)未配置 ③ 城市名有误',
+        message: '请在Supabase SQL Editor中执行 database_schema.sql 创建表,或在.env中配置AMAP_KEY'
       });
     }
 

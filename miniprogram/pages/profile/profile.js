@@ -113,9 +113,18 @@ Page({
   // 显示关于
   showAbout() {
     wx.showModal({
-      title: '关于',
-      content: '智能旅游规划助手 v1.0\n\n使用AI技术为您定制个性化旅行行程',
-      showCancel: false
+      title: '关于 · 智能旅游规划助手',
+      content: '版本: v1.0.0\n\n' +
+        '一款基于AI的旅游行程规划工具。\n\n' +
+        '主要功能:\n' +
+        '· AI智能生成个性化旅行行程\n' +
+        '· 景点推荐与地图路线展示\n' +
+        '· 旅行费用记账与预算管理\n' +
+        '· 行李清单管理\n' +
+        '· 目的地天气查询\n\n' +
+        'Web版: https://travel-planner-tau-wheat.vercel.app',
+      showCancel: false,
+      confirmText: '我知道了'
     });
   }
 });
