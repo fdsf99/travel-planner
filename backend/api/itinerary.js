@@ -148,6 +148,17 @@ router.post('/generate', async (req, res) => {
     // 步骤3: 验证和优化行程(预留扩展点)
     const optimizedItinerary = optimizeItinerary(aiResult.itinerary);
 
+    // 将请求参数中的基础信息合并到行程对象(AI返回的itinerary不含这些字段)
+    const enrichedItinerary = {
+      destination_city: destination,
+      days,
+      start_date: startDate,
+      end_date: endDate.toISOString().split('T')[0],
+      budget: { total: budget, perDay: Math.round(budget / days) },
+      interests,
+      ...optimizedItinerary
+    };
+
     // 步骤4: 保存到数据库(失败时降级为本地ID,不影响行程返回)
     const endDate = new Date(startDate);
     endDate.setDate(endDate.getDate() + days - 1);
@@ -165,7 +176,7 @@ router.post('/generate', async (req, res) => {
           perDay: Math.round(budget / days)
         },
         interests,
-        daily_plans: optimizedItinerary.dailyPlans,
+        daily_plans: enrichedItinerary.dailyPlans,
         status: 'draft'
       });
       itineraryId = itinerary.id;
@@ -179,7 +190,7 @@ router.post('/generate', async (req, res) => {
     res.json({
       success: true,
       itineraryId,
-      itinerary: optimizedItinerary
+      itinerary: enrichedItinerary
     });
   } catch (error) {
     handleError(res, 'Generate itinerary error', error);

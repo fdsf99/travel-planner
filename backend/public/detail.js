@@ -58,6 +58,11 @@ async function loadItinerary(id) {
 }
 
 function renderItinerary(itinerary) {
+  const dailyPlans = itinerary.daily_plans || itinerary.dailyPlans || [];
+  // 兜底: 如果 days 字段缺失(如AI直接返回的数据),从 dailyPlans 数组长度推算
+  if (!itinerary.days && dailyPlans.length > 0) {
+    itinerary.days = dailyPlans.length;
+  }
   document.getElementById('destTitle').textContent = itinerary.destination_city || '行程详情';
   const budget = itinerary.budget ? itinerary.budget.total : null;
 
@@ -71,8 +76,6 @@ function renderItinerary(itinerary) {
     <span>📅 ${formatDate(itinerary.start_date)} ~ ${formatDate(itinerary.end_date)}</span>
     ${itinerary.interests && itinerary.interests.length ? `<span>🏷 ${escapeHtml(itinerary.interests.join(' / '))}</span>` : ''}`;
 
-  // 兼容 daily_plans / dailyPlans
-  const dailyPlans = itinerary.daily_plans || itinerary.dailyPlans || [];
   window._dailyPlans = dailyPlans;
 
   // 渲染日期标签
