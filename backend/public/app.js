@@ -85,16 +85,22 @@ function getQueryParam(name) {
     e.preventDefault();
     const statusMsg = document.getElementById('statusMsg');
     const btn = document.getElementById('submitBtn');
+    const daysRaw = parseInt(document.getElementById('days').value, 10);
+    const budgetRaw = parseInt(document.getElementById('budget').value, 10);
     const payload = {
       destination: document.getElementById('destination').value.trim(),
       startDate: document.getElementById('startDate').value,
-      days: parseInt(document.getElementById('days').value, 10) || 3,
-      budget: parseInt(document.getElementById('budget').value, 10) || 5000,
+      days: (isNaN(daysRaw) || daysRaw < 1) ? 3 : Math.min(daysRaw, 15),
+      budget: (isNaN(budgetRaw) || budgetRaw < 0) ? 5000 : budgetRaw,
       interests: Array.from(selected)
     };
 
     if (!payload.destination || !payload.startDate) {
       showMsg(statusMsg, '请填写目的地和出发日期', 'error');
+      return;
+    }
+    if (payload.days > 15) {
+      showMsg(statusMsg, '天数最多 15 天', 'error');
       return;
     }
 
@@ -135,14 +141,14 @@ async function loadRecent() {
     if (items.length === 0) return;
     section.style.display = '';
     list.innerHTML = items.map(it => `
-      <li>
-        <a href="/detail.html?id=${it.id}">
-          <strong>${escapeHtml(it.destination_city || '')}</strong>
-          <span>${it.days || 0} 天</span>
+      <li class="recent-item">
+        <a href="/detail.html?id=${it.id}" class="recent-link">
+          <strong>${escapeHtml(it.destination_city || '未命名行程')}</strong>
+          <span class="recent-days">${it.days || 0} 天</span>
           <span class="meta">${formatDate(it.start_date)}</span>
         </a>
       </li>`).join('');
-  } catch (e) { /* 静默 */ }
+  } catch (e) { /* 静默: 首页最近行程加载失败不影响主功能 */ }
 }
 
 function escapeHtml(s) {

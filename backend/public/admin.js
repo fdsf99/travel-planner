@@ -72,17 +72,25 @@ async function loadItineraries() {
         const id = btn.dataset.id;
         const name = btn.dataset.name;
         if (!confirm(`确定删除"${name}"?此操作不可恢复。`)) return;
+        btn.disabled = true;
+        btn.textContent = '删除中...';
         try {
           await api(`/api/itinerary/${id}/delete`, { method: 'POST' });
+          // 同步清理 sessionStorage 缓存
+          try { sessionStorage.removeItem(`itinerary_${id}`); } catch (e) { /* ignore */ }
           showMsg(statusMsg, '删除成功', 'success');
           loadItineraries();
         } catch (err) {
           showMsg(statusMsg, '删除失败: ' + err.message, 'error');
+          btn.disabled = false;
+          btn.textContent = '删除';
         }
       });
     });
   } catch (err) {
     loading.style.display = 'none';
-    showMsg(statusMsg, '加载失败: ' + err.message, 'error');
+    showMsg(statusMsg, '加载失败: ' + err.message + ' (点击此处重试)', 'error');
+    statusMsg.style.cursor = 'pointer';
+    statusMsg.onclick = () => { statusMsg.onclick = null; loadItineraries(); };
   }
 }

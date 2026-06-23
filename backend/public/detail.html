@@ -30,14 +30,27 @@
         </div>
       </div>
 
+      <div class="overview-grid" id="overviewGrid"></div>
+
       <div class="day-tabs" id="dayTabs"></div>
 
       <section class="card">
         <div id="dayPlan"></div>
       </section>
 
+      <section class="card" id="packingCard" style="display:none;">
+        <h2>🧳 行李清单</h2>
+        <div id="packingList" class="packing-list"></div>
+      </section>
+
+      <section class="card" id="tipsCard" style="display:none;">
+        <h2>💡 旅行提示</h2>
+        <ul id="tipsList" class="tips-list"></ul>
+      </section>
+
       <div class="actions">
         <button class="btn-outline" onclick="window.history.back()">返回</button>
+        <button class="btn-outline" onclick="window.location.href='/'">再生成一个</button>
       </div>
     </section>
   </main>
