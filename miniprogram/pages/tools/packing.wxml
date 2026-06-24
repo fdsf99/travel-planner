@@ -4,12 +4,12 @@
   <view class="progress-card card">
     <view class="progress-header">
       <text class="progress-title">准备进度</text>
-      <text class="progress-text">{{getProgress().checked}}/{{getProgress().total}} ({{getProgress().percentage}}%)</text>
+      <text class="progress-text">{{progressChecked}}/{{progressTotal}} ({{progressPercentage}}%)</text>
     </view>
     <view class="progress-bar">
       <view 
         class="progress-fill" 
-        style="width: {{getProgress().percentage}}%"
+        style="width: {{progressPercentage}}%"
       ></view>
     </view>
   </view>
@@ -20,12 +20,12 @@
     <scroll-view class="template-scroll" scroll-x>
       <view 
         class="template-item {{currentTemplate === item.key ? 'active' : ''}}"
-        wx:for="{{[{key:'summer',name:'夏季出行'},{key:'winter',name:'冬季出行'},{key:'beach',name:'海边度假'},{key:'mountain',name:'登山徒步'}]}}"
+        wx:for="{{templateOptions}}"
         wx:key="key"
         bindtap="handleTemplateChange"
         data-template="{{item.key}}"
       >
-        <text class="template-icon">{{item.key === 'summer' ? '☀️' : item.key === 'winter' ? '❄️' : item.key === 'beach' ? '🏖️' : '⛰️'}}</text>
+        <text class="template-icon">{{item.icon}}</text>
         <text class="template-name">{{item.name}}</text>
       </view>
     </scroll-view>
@@ -43,7 +43,7 @@
         <view class="category-info">
           <text class="category-icon">{{item.icon}}</text>
           <text class="category-name">{{item.name}}</text>
-          <text class="category-count">{{item.items.length}}件</text>
+          <text class="category-count">{{item.itemCount}}件</text>
         </view>
       </view>
 
@@ -83,7 +83,7 @@
     <!-- 选择分类 -->
     <scroll-view class="category-selector" scroll-x>
       <view 
-        class="category-chip {{selectedCategory === cat.id ? 'active' : ''}}"
+        class="category-chip {{selectedCategory === item.id ? 'active' : ''}}"
         wx:for="{{categories}}"
         wx:key="id"
         bindtap="selectCategory"

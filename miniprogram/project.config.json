@@ -40,8 +40,8 @@
     "disableSWC": true
   },
   "compileType": "miniprogram",
-  "libVersion": "2.32.0",
-  "appid": "wxf578fe0136a9a37f",
+  "libVersion": "3.16.1",
+  "appid": "wx1bf7a7212712b373",
   "projectname": "travel-planner",
   "condition": {},
   "editorSetting": {

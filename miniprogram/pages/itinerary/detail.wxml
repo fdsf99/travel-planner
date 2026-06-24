@@ -2,13 +2,13 @@
 <view class="container" wx:if="{{itinerary}}">
   <!-- 行程概览 -->
   <view class="summary card">
-    <text class="dest-title">{{itinerary.destination_city || itinerary.destination?.city}}</text>
+    <text class="dest-title">{{itinerary.destination}}</text>
     <view class="summary-info">
       <text>{{itinerary.days}}天行程</text>
       <text>|</text>
-      <text>{{itinerary.start_date || itinerary.startDate}}</text>
+      <text>{{itinerary.startDate}}</text>
       <text>|</text>
-      <text>预算¥{{itinerary.budget?.total}}</text>
+      <text>预算¥{{itinerary.budget}}</text>
     </view>
   </view>
 
@@ -16,7 +16,7 @@
   <scroll-view class="date-tabs" scroll-x>
     <view 
       class="date-tab {{currentDay === index ? 'active' : ''}}"
-      wx:for="{{itinerary.daily_plans || itinerary.dailyPlans}}"
+      wx:for="{{itinerary.dailyPlans}}"
       wx:key="day"
       bindtap="switchDay"
       data-index="{{index}}"
@@ -29,7 +29,7 @@
   <!-- 当日活动 -->
   <view class="activities-section">
     <view class="section-header">
-      <text class="theme">{{currentPlan.theme || '精彩行程'}}</text>
+      <text class="theme">{{currentPlan.theme ? currentPlan.theme : '精彩行程'}}</text>
     </view>
 
     <view 

@@ -48,6 +48,7 @@ Page({
     const budget = this.data.budget;
     const totalSpent = expenses.reduce((sum, exp) => sum + exp.amount, 0);
     const remaining = budget - totalSpent;
+    const remainingOverBudget = remaining < 0;
     const progressPercent = budget > 0 ? (totalSpent / budget * 100).toFixed(1) : '0.0';
     const progressWidth = budget > 0 ? Math.min((totalSpent / budget) * 100, 100) : 0;
     const categoryStats = this.calculateCategoryStats(expenses, totalSpent);
@@ -57,6 +58,7 @@ Page({
       expenses: expenses.sort((a, b) => new Date(b.date) - new Date(a.date)),
       totalSpent,
       remaining,
+      remainingOverBudget,
       progressPercent,
       progressWidth,
       categoryStats,

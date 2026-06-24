@@ -1,5 +1,5 @@
 // pages/index/index.js
-const { post, showLoading, hideLoading, showSuccess, showError } = require('../../utils/request');
+const { get, post, showLoading, hideLoading, showSuccess, showError } = require('../../utils/request');
 
 Page({
   data: {
@@ -7,6 +7,7 @@ Page({
     days: 3,
     budget: '',
     startDate: '',
+    startDateText: '请选择出发日期',
     interestOptions: ['文化', '自然', '美食', '购物', '亲子', '历史', '艺术'],
     selectedInterests: [],
     generating: false,
@@ -44,7 +45,8 @@ Page({
   // 日期选择
   onDateChange(e) {
     this.setData({
-      startDate: e.detail.value
+      startDate: e.detail.value,
+      startDateText: e.detail.value || '请选择出发日期'
     });
     this.checkCanSubmit();
   },
@@ -124,10 +126,10 @@ Page({
         const itineraries = result.itineraries || [];
         this.setData({
           recentItineraries: itineraries.map(item => ({
-            _id: item.id,
-            destination: { city: item.destination_city },
-            days: item.days,
-            startDate: item.start_date
+            id: item.id,
+            destination: item.destination_city || (item.destination && item.destination.city) || '',
+            days: item.days || 0,
+            startDate: item.start_date || item.startDate || ''
           }))
         });
       } else {

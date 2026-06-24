@@ -21,7 +21,7 @@
       <view class="card-header">
         <view class="destination">
           <text class="dest-name">{{item.destination}}</text>
-          <text class="dest-tag">{{item.days}}天{{item.budget ? ' ¥' + item.budget.total : ''}}</text>
+          <text class="dest-tag">{{item.days}}天{{item.budgetText}}</text>
         </view>
         <view class="card-actions">
           <button 
@@ -43,11 +43,11 @@
         </view>
         <view class="info-row">
           <text class="label">✨ 主题</text>
-          <text class="value">{{item.summary || '智能行程'}}</text>
+          <text class="value">{{item.summaryText}}</text>
         </view>
-        <view class="info-row" wx:if="{{item.interests}}">
+        <view class="info-row" wx:if="{{item.interestsText}}">
           <text class="label">🎯 兴趣</text>
-          <text class="value">{{item.interests.join('、')}}</text>
+          <text class="value">{{item.interestsText}}</text>
         </view>
       </view>
 

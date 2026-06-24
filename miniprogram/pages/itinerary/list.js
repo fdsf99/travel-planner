@@ -37,12 +37,18 @@ Page({
       });
       
       if (result.success) {
-        const newItineraries = (result.itineraries || []).map(item => ({
-          ...item,
-          destination: item.destination_city || item.destination?.city,
-          startDate: item.start_date || item.startDate,
-          budget: item.budget || { total: 0 }
-        }));
+        const newItineraries = (result.itineraries || []).map(item => {
+          const budgetTotal = item.budget && item.budget.total ? item.budget.total : 0;
+          const interests = item.interests || [];
+          return {
+            ...item,
+            destination: item.destination_city || (item.destination && item.destination.city) || '',
+            startDate: item.start_date || item.startDate || '',
+            budgetText: budgetTotal > 0 ? ' ¥' + budgetTotal : '',
+            summaryText: item.summary || '智能行程',
+            interestsText: interests.length > 0 ? interests.join('、') : ''
+          };
+        });
         
         this.setData({
           itineraries: isRefresh ? newItineraries : [...this.data.itineraries, ...newItineraries],

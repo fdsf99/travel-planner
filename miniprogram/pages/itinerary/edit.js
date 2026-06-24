@@ -9,7 +9,9 @@ Page({
     days: 3,
     budget: 3000,
     startDate: '',
+    startDateText: '选择日期',
     interests: [],
+    selectedInterestList: [],
     interestOptions: ['文化', '自然', '美食', '购物', '亲子', '历史', '艺术', '冒险'],
     saving: false
   },
@@ -31,13 +33,18 @@ Page({
       
       if (result.success && result.itinerary) {
         const itinerary = result.itinerary;
+        const budgetTotal = itinerary.budget && itinerary.budget.total ? itinerary.budget.total : 3000;
+        const startDateVal = (itinerary.start_date || itinerary.startDate || '').split('T')[0];
+        const interestList = itinerary.interests || [];
         this.setData({
           itinerary,
           destination: itinerary.destination_city || itinerary.destination || '',
           days: itinerary.days || 3,
-          budget: itinerary.budget?.total || 3000,
-          startDate: (itinerary.start_date || itinerary.startDate || '').split('T')[0],
-          interests: itinerary.interests || []
+          budget: budgetTotal,
+          startDate: startDateVal,
+          startDateText: startDateVal || '选择日期',
+          interests: interestList,
+          selectedInterestList: interestList
         });
       } else {
         showError('加载失败');
@@ -67,13 +74,16 @@ Page({
 
   // 选择日期
   onDateChange(e) {
-    this.setData({ startDate: e.detail.value });
+    this.setData({ 
+      startDate: e.detail.value,
+      startDateText: e.detail.value || '选择日期'
+    });
   },
 
   // 切换兴趣标签
   toggleInterest(e) {
     const interest = e.currentTarget.dataset.interest;
-    const interests = this.data.interests;
+    const interests = [...this.data.interests];
     const index = interests.indexOf(interest);
     
     if (index > -1) {
@@ -82,7 +92,7 @@ Page({
       interests.push(interest);
     }
     
-    this.setData({ interests });
+    this.setData({ interests, selectedInterestList: interests });
   },
 
   // 保存行程

@@ -45,7 +45,9 @@ Page({
           this.setData({
             userInfo: {
               nickname: '游客',
-              avatar: '/images/default-avatar.png'
+              avatar: '/images/default-avatar.png',
+              nicknameText: '游客',
+              avatarUrl: '/images/default-avatar.png'
             }
           });
           
@@ -80,10 +82,10 @@ Page({
           },
           myItineraries: itineraries.map(item => ({
             id: item.id,
-            destination: item.destination_city,
-            days: item.days,
-            startDate: item.start_date,
-            status: item.status || 'draft'
+            destination: item.destination_city || (item.destination && item.destination.city) || '',
+            days: item.days || 0,
+            startDateText: item.start_date || item.startDate || '',
+            statusText: (item.status || 'draft') === 'draft' ? '草稿' : '已完成'
           }))
         });
       } else {

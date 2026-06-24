@@ -28,7 +28,7 @@
       
       <view class="current-info">
         <view class="weather-main">
-          <text class="weather-icon">{{weatherData.current.weather === '晴' ? '☀️' : weatherData.current.weather === '多云' ? '⛅' : weatherData.current.weather === '阴' ? '☁️' : weatherData.current.weather.includes('雨') ? '🌧️' : '⛈️'}}</text>
+          <text class="weather-icon">{{weatherData.current.weatherIcon}}</text>
           <text class="weather-desc">{{weatherData.current.weather}}</text>
         </view>
         
@@ -72,7 +72,7 @@
         </view>
         
         <view class="forecast-weather">
-          <text class="forecast-icon">{{item.weather === '晴' ? '☀️' : item.weather === '多云' ? '⛅' : item.weather === '阴' ? '☁️' : item.weather.includes('雨') ? '🌧️' : '⛈️'}}</text>
+          <text class="forecast-icon">{{item.weatherIcon}}</text>
           <text class="forecast-desc">{{item.weather}}</text>
         </view>
         

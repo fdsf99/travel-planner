@@ -41,6 +41,16 @@ Page({
     }
   },
 
+  // 获取天气图标
+  getWeatherIcon(weather) {
+    if (weather === '晴') return '☀️';
+    if (weather === '多云') return '⛅';
+    if (weather === '阴') return '☁️';
+    if (weather.includes('雨')) return '🌧️';
+    if (weather.includes('雪')) return '❄️';
+    return '⛈️';
+  },
+
   // 生成模拟天气数据(实际应调用真实API)
   generateMockWeather(city) {
     const today = new Date();
@@ -53,6 +63,7 @@ Page({
       
       const weathers = ['晴', '多云', '阴', '小雨', '中雨', '大雨', '雷阵雨'];
       const weatherIndex = Math.floor(Math.random() * weathers.length);
+      const weather = weathers[weatherIndex];
       
       const baseTemp = 20 + Math.random() * 10;
       const highTemp = Math.round(baseTemp + 5 + Math.random() * 5);
@@ -61,7 +72,8 @@ Page({
       forecasts.push({
         date: this.formatDate(date),
         weekday: this.getWeekday(date),
-        weather: weathers[weatherIndex],
+        weather: weather,
+        weatherIcon: this.getWeatherIcon(weather),
         high: highTemp,
         low: lowTemp,
         wind: `${['东', '南', '西', '北'][Math.floor(Math.random() * 4)]}风${Math.floor(Math.random() * 5) + 1}级`,
@@ -70,6 +82,7 @@ Page({
     }
 
     const current = forecasts[0];
+    current.weatherIcon = this.getWeatherIcon(current.weather);
     
     // 穿衣建议
     let clothingAdvice = '';

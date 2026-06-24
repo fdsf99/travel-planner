@@ -26,13 +26,26 @@ Page({
       
       if (result.success && result.itinerary) {
         const itinerary = result.itinerary;
-        // 兼容两种命名: daily_plans 和 dailyPlans
-        const dailyPlans = itinerary.daily_plans || itinerary.dailyPlans || [];
+        
+        // 统一数据字段命名，避免WXML中使用||和?.
+        const normalizedItinerary = {
+          id: itinerary.id,
+          destination: itinerary.destination_city || (itinerary.destination && itinerary.destination.city) || '',
+          days: itinerary.days || 0,
+          startDate: itinerary.start_date || itinerary.startDate || '',
+          budget: (itinerary.budget && itinerary.budget.total) || 0,
+          dailyPlans: (itinerary.daily_plans || itinerary.dailyPlans || []).map(plan => ({
+            day: plan.day || 1,
+            date: plan.date || '',
+            theme: plan.theme || '',
+            activities: plan.activities || []
+          }))
+        };
         
         this.setData({
-          itinerary: itinerary,
+          itinerary: normalizedItinerary,
           currentDay: 0,
-          currentPlan: dailyPlans[0] || {}
+          currentPlan: normalizedItinerary.dailyPlans[0] || {}
         });
       } else {
         showError('加载失败');
@@ -50,12 +63,9 @@ Page({
     const index = e.currentTarget.dataset.index;
     const { itinerary } = this.data;
     
-    // 兼容两种命名: daily_plans 和 dailyPlans
-    const dailyPlans = itinerary.daily_plans || itinerary.dailyPlans || [];
-    
     this.setData({
       currentDay: index,
-      currentPlan: dailyPlans[index] || {}
+      currentPlan: itinerary.dailyPlans[index] || {}
     });
   },
 

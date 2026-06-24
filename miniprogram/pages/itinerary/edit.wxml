@@ -1,0 +1,71 @@
+<!--pages/itinerary/edit.wxml-->
+<view class="container">
+  <view class="form-card card">
+    <view class="form-title">编辑行程</view>
+    
+    <!-- 目的地 -->
+    <view class="form-item">
+      <text class="label">📍 目的地</text>
+      <input 
+        class="input"
+        placeholder="输入目的地城市"
+        value="{{destination}}"
+        bindinput="onDestinationInput"
+      />
+    </view>
+
+    <!-- 天数 -->
+    <view class="form-item">
+      <text class="label">📆 行程天数</text>
+      <picker 
+        mode="selector" 
+        range="{{[1,2,3,4,5,6,7,8,9,10]}}" 
+        value="{{days-1}}"
+        bindchange="onDaysChange"
+      >
+        <view class="picker">{{days}}天</view>
+      </picker>
+    </view>
+
+    <!-- 预算 -->
+    <view class="form-item">
+      <text class="label">💰 预算(元)</text>
+      <input 
+        class="input"
+        type="number"
+        placeholder="3000"
+        value="{{budget}}"
+        bindinput="onBudgetInput"
+      />
+    </view>
+
+    <!-- 出发日期 -->
+    <view class="form-item">
+      <text class="label">📅 出发日期</text>
+      <picker mode="date" value="{{startDate}}" bindchange="onDateChange">
+        <view class="picker">{{startDateText}}</view>
+      </picker>
+    </view>
+
+    <!-- 兴趣标签 -->
+    <view class="form-item">
+      <text class="label">🎯 兴趣偏好</text>
+      <view class="tags">
+        <view 
+          class="tag {{selectedInterestList.indexOf(item) > -1 ? 'tag-selected' : ''}}"
+          wx:for="{{interestOptions}}"
+          wx:key="item"
+          bindtap="toggleInterest"
+          data-interest="{{item}}"
+        >
+          {{item}}
+        </view>
+      </view>
+    </view>
+
+    <!-- 保存按钮 -->
+    <button class="btn-primary" bindtap="saveItinerary" disabled="{{saving}}">
+      {{saving ? '保存中...' : '保存行程'}}
+    </button>
+  </view>
+</view>

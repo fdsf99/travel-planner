@@ -46,7 +46,7 @@
     <view class="form-item">
       <text class="label">出发日期</text>
       <picker mode="date" value="{{startDate}}" bindchange="onDateChange">
-        <view class="picker">{{startDate || '请选择出发日期'}}</view>
+        <view class="picker">{{startDateText}}</view>
       </picker>
     </view>
 
@@ -82,11 +82,11 @@
     <view 
       class="itinerary-item card"
       wx:for="{{recentItineraries}}"
-      wx:key="_id"
+      wx:key="id"
       bindtap="viewItinerary"
-      data-id="{{item._id}}"
+      data-id="{{item.id}}"
     >
-      <text class="itinerary-dest">{{item.destination.city}}</text>
+      <text class="itinerary-dest">{{item.destination}}</text>
       <text class="itinerary-info">{{item.days}}天 | {{item.startDate}}</text>
     </view>
   </view>

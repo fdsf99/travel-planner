@@ -20,7 +20,7 @@
       </view>
       <view class="stat-item">
         <text class="stat-label">剩余</text>
-        <text class="stat-value remaining {{remaining < 0 ? 'over' : ''}}">¥{{displayRemaining}}</text>
+        <text class="stat-value remaining {{remainingOverBudget ? 'over' : ''}}">¥{{displayRemaining}}</text>
       </view>
     </view>
 

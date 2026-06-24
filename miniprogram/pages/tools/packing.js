@@ -5,12 +5,12 @@ Page({
   data: {
     itineraryId: '',
     categories: [
-      { id: 'documents', name: '证件票据', icon: '📄', items: [] },
-      { id: 'clothes', name: '衣物鞋帽', icon: '👕', items: [] },
-      { id: 'toiletries', name: '洗漱用品', icon: '🧴', items: [] },
-      { id: 'electronics', name: '电子产品', icon: '📱', items: [] },
-      { id: 'medicine', name: '常用药品', icon: '💊', items: [] },
-      { id: 'others', name: '其他物品', icon: '🎒', items: [] }
+      { id: 'documents', name: '证件票据', icon: '📄', items: [], itemCount: 0 },
+      { id: 'clothes', name: '衣物鞋帽', icon: '👕', items: [], itemCount: 0 },
+      { id: 'toiletries', name: '洗漱用品', icon: '🧴', items: [], itemCount: 0 },
+      { id: 'electronics', name: '电子产品', icon: '📱', items: [], itemCount: 0 },
+      { id: 'medicine', name: '常用药品', icon: '💊', items: [], itemCount: 0 },
+      { id: 'others', name: '其他物品', icon: '🎒', items: [], itemCount: 0 }
     ],
     templates: {
       summer: ['短袖T恤', '短裤', '凉鞋', '防晒霜', '太阳镜', '遮阳帽'],
@@ -20,7 +20,16 @@ Page({
     },
     currentTemplate: null,
     newItemName: '',
-    selectedCategory: 'others'
+    selectedCategory: 'others',
+    progressChecked: 0,
+    progressTotal: 0,
+    progressPercentage: 0,
+    templateOptions: [
+      { key: 'summer', name: '夏季出行', icon: '☀️' },
+      { key: 'winter', name: '冬季出行', icon: '❄️' },
+      { key: 'beach', name: '海边度假', icon: '🏖️' },
+      { key: 'mountain', name: '登山徒步', icon: '⛰️' }
+    ]
   },
 
   onLoad(options) {
@@ -88,6 +97,7 @@ Page({
       currentTemplate: templateName
     });
 
+    this.updateProgress();
     this.savePackingList();
     showSuccess('已应用模板');
   },
@@ -116,6 +126,7 @@ Page({
     });
 
     this.setData({ categories });
+    this.updateProgress();
     this.savePackingList();
   },
 
@@ -132,6 +143,7 @@ Page({
     });
 
     this.setData({ categories });
+    this.updateProgress();
     this.savePackingList();
     showSuccess('已删除');
   },
@@ -177,12 +189,13 @@ Page({
       newItemName: ''
     });
 
+    this.updateProgress();
     this.savePackingList();
     showSuccess('添加成功');
   },
 
-  // 获取进度
-  getProgress() {
+  // 更新进度
+  updateProgress() {
     const { categories } = this.data;
     let total = 0;
     let checked = 0;
@@ -195,7 +208,18 @@ Page({
     });
 
     const percentage = total > 0 ? Math.round((checked / total) * 100) : 0;
-    return { total, checked, percentage };
+    
+    const categoriesWithCount = categories.map(cat => ({
+      ...cat,
+      itemCount: cat.items.length
+    }));
+
+    this.setData({
+      progressChecked: checked,
+      progressTotal: total,
+      progressPercentage: percentage,
+      categories: categoriesWithCount
+    });
   },
 
   // 返回

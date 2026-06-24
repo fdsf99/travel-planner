@@ -3,6 +3,7 @@
     "pages/index/index",
     "pages/itinerary/list",
     "pages/itinerary/detail",
+    "pages/itinerary/edit",
     "pages/map/view",
     "pages/tools/packing",
     "pages/tools/expenses",

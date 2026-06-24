@@ -2,9 +2,9 @@
 <view class="container">
   <!-- 用户信息 -->
   <view class="user-info card">
-    <image class="avatar" src="{{userInfo.avatar || '/images/default-avatar.png'}}" mode="aspectFill"></image>
+    <image class="avatar" src="{{userInfo.avatarUrl}}" mode="aspectFill"></image>
     <view class="user-details">
-      <text class="nickname">{{userInfo.nickname || '未登录'}}</text>
+      <text class="nickname">{{userInfo.nicknameText}}</text>
       <button class="login-btn" wx:if="{{!userInfo}}" bindtap="login">微信登录</button>
     </view>
   </view>
@@ -37,11 +37,11 @@
     >
       <view class="itinerary-header">
         <text class="dest">{{item.destination}}</text>
-        <text class="date">{{item.start_date || item.startDate}}</text>
+        <text class="date">{{item.startDateText}}</text>
       </view>
       <view class="itinerary-footer">
         <text>{{item.days}}天</text>
-        <text class="status">{{item.status === 'draft' ? '草稿' : '已完成'}}</text>
+        <text class="status">{{item.statusText}}</text>
       </view>
     </view>
     
