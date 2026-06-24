@@ -72,7 +72,7 @@ Page({
     showLoading('优化中...');
     
     try {
-      const { currentPlan } = this.data;
+      const { currentPlan, itinerary } = this.data;
       
       // 提取当前天的景点
       const attractions = currentPlan.activities
@@ -88,14 +88,28 @@ Page({
         return;
       }
 
-      // TODO: 调用优化API
-      // const result = await post('/optimize/route', { ... });
-      
-      hideLoading();
-      showSuccess('优化完成');
-      
-      // 刷新页面
-      this.loadItinerary(this.data.itineraryId);
+      // 使用第一个景点作为起点
+      const startLocation = attractions[0].location;
+
+      // 调用优化API
+      const result = await post('/optimize/route', {
+        attractions,
+        startLocation,
+        options: {
+          mode: 'walking'
+        }
+      });
+
+      if (result.success && result.optimizedRoute) {
+        hideLoading();
+        showSuccess('优化完成');
+        
+        // 刷新页面
+        this.loadItinerary(this.data.itineraryId);
+      } else {
+        hideLoading();
+        showError('优化失败');
+      }
       
     } catch (error) {
       hideLoading();
@@ -124,7 +138,7 @@ Page({
   // 跳转到天气查询
   goToWeather() {
     const { itinerary } = this.data;
-    const destination = itinerary.destination?.city || '北京';
+    const destination = itinerary.destination_city || itinerary.destination?.city || '北京';
     wx.navigateTo({
       url: `/pages/tools/weather?destination=${encodeURIComponent(destination)}`
     });

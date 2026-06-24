@@ -37,7 +37,12 @@ Page({
       });
       
       if (result.success) {
-        const newItineraries = result.itineraries || [];
+        const newItineraries = (result.itineraries || []).map(item => ({
+          ...item,
+          destination: item.destination_city || item.destination?.city,
+          startDate: item.start_date || item.startDate,
+          budget: item.budget || { total: 0 }
+        }));
         
         this.setData({
           itineraries: isRefresh ? newItineraries : [...this.data.itineraries, ...newItineraries],

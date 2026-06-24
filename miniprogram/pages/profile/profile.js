@@ -1,5 +1,5 @@
 // pages/profile/profile.js
-const { showError } = require('../../utils/request');
+const { get, showError, showLoading, hideLoading } = require('../../utils/request');
 
 Page({
   data: {
@@ -60,9 +60,44 @@ Page({
 
   // 加载用户数据
   async loadUserData() {
+    showLoading('加载中...');
+    
     try {
-      // TODO: 从API获取用户的行程列表和统计数据
-      // 暂时使用模拟数据
+      const userId = 'demo-user-001';
+      const result = await get(`/itinerary/user/${userId}`, {
+        page: 1,
+        limit: 10
+      });
+
+      if (result.success) {
+        const itineraries = result.itineraries || [];
+        
+        this.setData({
+          stats: {
+            itineraryCount: itineraries.length,
+            favoriteCount: 0,
+            viewCount: 0
+          },
+          myItineraries: itineraries.map(item => ({
+            id: item.id,
+            destination: item.destination_city,
+            days: item.days,
+            startDate: item.start_date,
+            status: item.status || 'draft'
+          }))
+        });
+      } else {
+        this.setData({
+          stats: {
+            itineraryCount: 0,
+            favoriteCount: 0,
+            viewCount: 0
+          },
+          myItineraries: []
+        });
+      }
+    } catch (error) {
+      console.error('Load user data error:', error);
       this.setData({
         stats: {
           itineraryCount: 0,
@@ -71,8 +106,8 @@ Page({
         },
         myItineraries: []
       });
-    } catch (error) {
-      console.error('Load user data error:', error);
+    } finally {
+      hideLoading();
     }
   },
 

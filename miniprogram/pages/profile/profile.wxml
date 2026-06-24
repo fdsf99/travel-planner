@@ -31,16 +31,16 @@
     <view 
       class="itinerary-item card"
       wx:for="{{myItineraries}}"
-      wx:key="_id"
+      wx:key="id"
       bindtap="viewItinerary"
-      data-id="{{item._id}}"
+      data-id="{{item.id}}"
     >
       <view class="itinerary-header">
-        <text class="dest">{{item.destination.city}}</text>
-        <text class="date">{{item.startDate}}</text>
+        <text class="dest">{{item.destination}}</text>
+        <text class="date">{{item.start_date || item.startDate}}</text>
       </view>
       <view class="itinerary-footer">
-        <text>{{item.days}}天 | ¥{{item.budget.total}}</text>
+        <text>{{item.days}}天</text>
         <text class="status">{{item.status === 'draft' ? '草稿' : '已完成'}}</text>
       </view>
     </view>

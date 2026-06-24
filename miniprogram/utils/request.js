@@ -20,7 +20,6 @@ function request(options) {
 
     wx.request({
       url: `${getApiBaseUrl()}${url}`,
-      url: fullUrl,
       method,
       data,
       header: {

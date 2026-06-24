@@ -148,6 +148,10 @@ router.post('/generate', async (req, res) => {
     // 步骤3: 验证和优化行程(预留扩展点)
     const optimizedItinerary = optimizeItinerary(aiResult.itinerary);
 
+    // 步骤4: 计算结束日期
+    const endDate = new Date(startDate);
+    endDate.setDate(endDate.getDate() + days - 1);
+
     // 将请求参数中的基础信息合并到行程对象(AI返回的itinerary不含这些字段)
     const enrichedItinerary = {
       destination_city: destination,
@@ -158,10 +162,6 @@ router.post('/generate', async (req, res) => {
       interests,
       ...optimizedItinerary
     };
-
-    // 步骤4: 保存到数据库(失败时降级为本地ID,不影响行程返回)
-    const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + days - 1);
 
     let itineraryId;
     try {
@@ -267,10 +267,95 @@ router.post('/:id/delete', deleteItineraryHandler);
 
 /**
  * 优化行程(内部函数)
- * 预留: 检查时间冲突、优化路线顺序等后处理逻辑
+ * 检查时间冲突、优化路线顺序等后处理逻辑
  */
 function optimizeItinerary(itinerary) {
-  return itinerary;
+  if (!itinerary || !itinerary.dailyPlans) {
+    return itinerary;
+  }
+
+  const optimizedDailyPlans = itinerary.dailyPlans.map(dayPlan => {
+    if (!dayPlan.activities || dayPlan.activities.length === 0) {
+      return dayPlan;
+    }
+
+    // 按时间排序活动
+    const sortedActivities = [...dayPlan.activities].sort((a, b) => {
+      const timeA = parseTime(a.startTime);
+      const timeB = parseTime(b.startTime);
+      if (timeA === null || timeB === null) return 0;
+      return timeA - timeB;
+    });
+
+    // 检查并修复时间冲突
+    const fixedActivities = fixTimeConflicts(sortedActivities);
+
+    return {
+      ...dayPlan,
+      activities: fixedActivities
+    };
+  });
+
+  return {
+    ...itinerary,
+    dailyPlans: optimizedDailyPlans
+  };
+}
+
+/**
+ * 解析 HH:MM 时间字符串为当天分钟数
+ */
+function parseTime(timeStr) {
+  if (!timeStr || typeof timeStr !== 'string') return null;
+  const parts = timeStr.split(':');
+  if (parts.length !== 2) return null;
+  const hours = Number.parseInt(parts[0], 10);
+  const minutes = Number.parseInt(parts[1], 10);
+  if (Number.isNaN(hours) || Number.isNaN(minutes)) return null;
+  if (hours < 0 || hours > 23 || minutes < 0 || minutes > 59) return null;
+  return hours * 60 + minutes;
+}
+
+/**
+ * 将分钟数转换为 HH:MM 格式
+ */
+function formatTime(minutes) {
+  const hours = Math.floor(minutes / 60);
+  const mins = minutes % 60;
+  return `${hours.toString().padStart(2, '0')}:${mins.toString().padStart(2, '0')}`;
+}
+
+/**
+ * 修复时间冲突
+ */
+function fixTimeConflicts(activities) {
+  const result = [];
+  let lastEndTime = parseTime('06:00'); // 默认从早上6点开始
+
+  activities.forEach((activity, index) => {
+    const activityCopy = { ...activity };
+    const startTime = parseTime(activity.startTime);
+    const duration = activity.duration || 120;
+
+    // 如果活动开始时间早于上一个活动结束时间，调整开始时间
+    if (startTime !== null && startTime < lastEndTime) {
+      activityCopy.startTime = formatTime(lastEndTime);
+      activityCopy.endTime = formatTime(lastEndTime + duration);
+      activityCopy.hasConflict = true;
+    } else {
+      // 确保结束时间正确
+      const endTime = startTime !== null ? startTime + duration : lastEndTime + duration;
+      activityCopy.endTime = formatTime(endTime);
+    }
+
+    // 更新最后结束时间（加上30分钟缓冲）
+    const currentEnd = parseTime(activityCopy.endTime);
+    lastEndTime = currentEnd !== null ? currentEnd + 30 : lastEndTime + duration + 30;
+
+    result.push(activityCopy);
+  });
+
+  return result;
 }
 
 module.exports = router;

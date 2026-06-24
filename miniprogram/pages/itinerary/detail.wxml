@@ -2,13 +2,13 @@
 <view class="container" wx:if="{{itinerary}}">
   <!-- 行程概览 -->
   <view class="summary card">
-    <text class="dest-title">{{itinerary.destination.city}}</text>
+    <text class="dest-title">{{itinerary.destination_city || itinerary.destination?.city}}</text>
     <view class="summary-info">
       <text>{{itinerary.days}}天行程</text>
       <text>|</text>
-      <text>{{itinerary.startDate}}</text>
+      <text>{{itinerary.start_date || itinerary.startDate}}</text>
       <text>|</text>
-      <text>预算¥{{itinerary.budget.total}}</text>
+      <text>预算¥{{itinerary.budget?.total}}</text>
     </view>
   </view>
 

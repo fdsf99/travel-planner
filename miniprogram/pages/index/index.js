@@ -113,11 +113,34 @@ Page({
 
   // 加载最近行程
   async loadRecentItineraries() {
-    // TODO: 从API获取用户的历史行程
-    // 暂时使用模拟数据
-    this.setData({
-      recentItineraries: []
-    });
+    try {
+      const userId = 'demo-user-001';
+      const result = await get(`/itinerary/user/${userId}`, {
+        page: 1,
+        limit: 5
+      });
+
+      if (result.success) {
+        const itineraries = result.itineraries || [];
+        this.setData({
+          recentItineraries: itineraries.map(item => ({
+            _id: item.id,
+            destination: { city: item.destination_city },
+            days: item.days,
+            startDate: item.start_date
+          }))
+        });
+      } else {
+        this.setData({
+          recentItineraries: []
+        });
+      }
+    } catch (error) {
+      console.error('Load recent itineraries error:', error);
+      this.setData({
+        recentItineraries: []
+      });
+    }
   },
 
   // 查看行程详情
